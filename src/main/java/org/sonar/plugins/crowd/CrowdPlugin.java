@@ -22,9 +22,12 @@ package org.sonar.plugins.crowd;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.SonarPlugin;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * 
@@ -34,8 +37,19 @@ import com.google.common.collect.ImmutableList;
  * @since 2013-12-7
  */
 public class CrowdPlugin extends SonarPlugin {
+    
+    /**
+     * Logger for this class
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(CrowdPlugin.class);
+
 
     public List<?> getExtensions() {
-        return ImmutableList.of(CrowdRealm.class,CrowdConfiguration.class,CrowdSsoFilter.class,CrowdLoginFilter.class,CrowdLogoutFilter.class);
+        try{
+            return ImmutableList.of(CrowdRealm.class,CrowdConfiguration.class,CrowdSsoFilter.class,CrowdLoginFilter.class,CrowdLogoutFilter.class);
+        }catch(java.lang.Throwable  ex){
+            LOG.warn("org.sonar.plugins.crowd.CrowdPlugin.getExtensions() exception:{}",ex.getMessage());            
+            return Lists.newArrayList();
+        }
     }
 }
